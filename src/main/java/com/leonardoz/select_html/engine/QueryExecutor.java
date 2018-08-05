@@ -9,6 +9,8 @@ import com.leonardoz.select_html.model.source.HtmlDocumentSource;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 
 public class QueryExecutor {
 
+    private Logger logger = LoggerFactory.getLogger(QueryExecutor.class);
     private QueryResult listQueryResult = new ListQueryResult();
     private QueryResult projectionQueryResult = new ProjectionQueryResult();
 
@@ -30,7 +33,6 @@ public class QueryExecutor {
 
     private <T> T getAs(Query query, QueryResult<T> result) {
         Elements elements = getElements(query);
-        System.out.println(query.getFilters().generate());
         Projection projection = query.getProjection();
         List<Extractors.Extractor> extractors = chooseExtractors(projection);
         return result.getResult(elements, extractors);
@@ -57,7 +59,7 @@ public class QueryExecutor {
                 return Jsoup.connect(source.getUri()).get();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error: " + e.getMessage());
             throw new RuntimeException("Invalid URI");
         }
     }

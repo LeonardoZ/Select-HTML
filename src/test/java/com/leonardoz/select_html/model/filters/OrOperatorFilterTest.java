@@ -2,7 +2,7 @@ package com.leonardoz.select_html.model.filters;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class OrOperatorFilterTest {
 

@@ -1,54 +1,13 @@
 package com.leonardoz.select_html.model.filters;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Optional;
 
 public class QueryFilters {
 
-    /**
-     * #### Key value
-     * ID
-     * #va
-     * id = "va"
-     * <p>
-     * Class
-     * .container
-     * class = "container"
-     * <p>
-     * Tag
-     * div
-     * tag = "div"
-     * <p>
-     * Attribute
-     * [text]
-     * attribute = "text"
-     * <p>
-     * <p>
-     * #### Composed
-     * <p>
-     * Attribute/value
-     * [text="nome"]
-     * attribute = "text" [contains/starts with/ends with/regex] "nome"
-     * <p>
-     * Sibling
-     * [id|class|tag|attribute|attribute/value] = ""
-     * sibling of
-     * [id|class|tag|attribute|attribute/value] =
-     * <p>
-     * Child
-     * [id|class|tag|attribute|attribute/value] = ""
-     * child of
-     * [id|class|tag|attribute|attribute/value] =
-     * <p>
-     * Descendant
-     * [id|class|tag|attribute|attribute/value] = ""
-     * descendant of
-     * [id|class|tag|attribute|attribute/value] =
-     * <p>
-     * <p>
-     * where
-     * ((tag = a) and ((attribute = (href = text))))
-     * tag
-     */
+    private static final Logger logger = LoggerFactory.getLogger(QueryFilters.class);
 
     // single filters
     private Optional<BaseFilter> filterExpression;
@@ -67,9 +26,11 @@ public class QueryFilters {
     }
 
     public String generate() {
-        return filterExpression.isPresent() ?
+        String query = filterExpression.isPresent() ?
                 filterExpression.get().toQuery() :
                 "*";
+        logger.debug("Generated query: " + query);
+        return query;
     }
 
 }
