@@ -10,4 +10,14 @@ public class Concat {
         return builder.toString();
     }
 
+    public static String spaced(String...values) {
+        StringBuilder builder = new StringBuilder();
+        for (String v : values) {
+            builder.append(v);
+            builder.append(" ");
+        }
+        return builder.toString().trim();
+    }
+
+
 }

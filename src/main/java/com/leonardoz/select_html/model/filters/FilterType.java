@@ -42,9 +42,12 @@ public enum FilterType {
         return Replace.in(format, values);
     }
 
-
     public String getOriginal() {
         return original;
     }
 
+    @Override
+    public String toString() {
+        return original;
+    }
 }

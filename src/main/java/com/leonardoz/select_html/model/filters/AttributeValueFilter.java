@@ -54,10 +54,8 @@ public class AttributeValueFilter extends BaseFilter<AttributeValueFilter> {
 
     @Override
     public String toString() {
-        return new  ToStringBuilder(this)
-                .append("attribute", attribute)
-                .append("attributeOperatorType", attributeOperatorType)
-                .append("value", value)
-                .toString();
+        return Concat.spaced("attribute", attribute.toString(),
+                "attributeOperatorType", attributeOperatorType.toString(),
+                "value", value.toString());
     }
 }

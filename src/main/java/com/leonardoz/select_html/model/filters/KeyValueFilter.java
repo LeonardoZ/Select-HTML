@@ -1,7 +1,6 @@
 package com.leonardoz.select_html.model.filters;
 
 import com.leonardoz.select_html.engine.Concat;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class KeyValueFilter extends BaseFilter<KeyValueFilter> {
 
@@ -39,10 +38,7 @@ public class KeyValueFilter extends BaseFilter<KeyValueFilter> {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("key", key)
-                .append(getFilterType())
-                .append("value", value)
-                .toString();
+        return Concat.spaced(getFilterType().toString(),
+                value);
     }
 }

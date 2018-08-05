@@ -2,24 +2,11 @@ grammar SelectHtmlParser ;
 
 import SelectHtmlLexer ;
 
-/*
-    SELECT
-        [tag|id|attribute|attributes|class|classes|text|html] // projection
-    FROM
-        @link
-    WHERE
-        [
-         [
-          [
-            [tag|class|id|attr|attribute] = 'STR']
-                (next sibling|siblings of|parent of|child of)? = [tag|class|id|attr|attribute] = 'STR']]
-                                                       (and|or) ....]
-*/
 statement : selectClause fromClause whereClause? EOF;
 
 selectClause : K_SELECT projection ;
 projection : projectionTypes (',' projectionTypes)* ;
-projectionTypes : (K_TAG|K_ID|K_CLASS|K_ATTR|K_ATTRS|K_TEXT|K_HTML) ;
+projectionTypes : ((K_TAG|K_ID|K_CLASS|K_ATTR|K_ATTRS|K_TEXT|K_HTML)| ALL) ;
 
 fromClause : K_FROM STRING ;
 
@@ -28,6 +15,8 @@ whereExpression  : whereExpression composedOperators whereExpression   #composed
                  | whereExpression andOrOperators whereExpression      #andOrFilterExpression
                  | attributeValueFilter                                #attributeValueFilterExpression
                  | keyValueFilter                                      #keyValueFilterExpression
+                 | OPEN_P whereExpression CLOSE_P                      #parenthesisExpression
+
                  ;
 
 attributeValueFilter : K_ATTR EQUAL STRING attributeValueOperators STRING ;

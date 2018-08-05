@@ -2,9 +2,12 @@ package com.leonardoz.select_html.parser;
 
 import com.leonardoz.select_html.engine.Replace;
 import com.leonardoz.select_html.model.filters.*;
+import com.leonardoz.select_html.model.projection.Projection;
 import com.leonardoz.select_html.model.projection.ProjectionType;
 import com.leonardoz.select_html.parser.SelectHtmlParserParser.*;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,6 +16,8 @@ import java.util.Queue;
 import java.util.stream.Collectors;
 
 public class SelectHtmlVisitorImpl extends com.leonardoz.select_html.parser.SelectHtmlParserBaseVisitor<String> {
+
+    private static Logger logger = LoggerFactory.getLogger(SelectHtmlVisitorImpl.class);
 
     private Queue<BaseFilter> queue = new LinkedList<>();
     private List<ProjectionType> projections = new LinkedList<>();
@@ -38,6 +43,8 @@ public class SelectHtmlVisitorImpl extends com.leonardoz.select_html.parser.Sele
                 return ProjectionType.ATTRIBUTE;
             } else if (text.equalsIgnoreCase("ATTRS")) {
                 return ProjectionType.ATTRIBUTES;
+            } else if (text.equals("*")) {
+                return ProjectionType.ALL;
             }
             return ProjectionType.of(text);
         }).collect(Collectors.toList());
@@ -52,77 +59,87 @@ public class SelectHtmlVisitorImpl extends com.leonardoz.select_html.parser.Sele
 
     @Override
     public String visitComposedFilterExpression(ComposedFilterExpressionContext ctx) {
-        String visited = super.visitComposedFilterExpression(ctx);
+        logger.debug("visitComposedFilterExpression");
         String operator = ctx.composedOperators().getText();
         WhereExpressionContext left = ctx.whereExpression(0);
         WhereExpressionContext right = ctx.whereExpression(1);
+        logger.debug(left.getText());
+        logger.debug(right.getText());
         FilterType filterType = FilterType.of(operator);
         BaseFilter leftFilter = filterExpression(left);
         BaseFilter rightFilter = filterExpression(right);
+        logger.debug("Left " + leftFilter);
+        logger.debug("Right " + rightFilter);
         ComposedFilter composedFilter = new ComposedFilter(filterType, leftFilter, rightFilter);
         queue.offer(composedFilter);
-        return visited;
+        logger.debug("Composed: " + composedFilter);
+        logger.debug(" ");
+        return super.visitComposedFilterExpression(ctx);
     }
 
     @Override
     public String visitAttributeValueFilterExpression(AttributeValueFilterExpressionContext ctx) {
-        String visited = super.visitAttributeValueFilterExpression(ctx);
+
+        logger.debug("visitAttributeValueFilterExpression");
         AttributeValueFilterContext filterCo = ctx.attributeValueFilter();
         String left = Replace.quotes(filterCo.STRING(0).getText());
         String operator = filterCo.attributeValueOperators().getText();
         String right = Replace.quotes(filterCo.STRING(1).getText());
         AttributeOperatorType type = AttributeOperatorType.of(operator);
         AttributeValueFilter filter = new AttributeValueFilter(left, type, right);
+        logger.debug("Attribute/Value: " + filter);
         queue.offer(filter);
-        return visited;
+        logger.debug(" ");
+        return super.visitAttributeValueFilterExpression(ctx);
     }
 
     @Override
     public String visitKeyValueFilterExpression(KeyValueFilterExpressionContext ctx) {
-        String visited = super.visitKeyValueFilterExpression(ctx);
+        logger.debug("visitKeyValueFilterExpression");
         String key = Replace.quotes(ctx.keyValueFilter().filter().getText());
         String value = Replace.quotes(ctx.keyValueFilter().STRING().getText());
         KeyValueFilter filter = new KeyValueFilter(FilterType.of(key), key, value);
+        logger.debug("Key/Value: " + filter);
         queue.offer(filter);
-        return visited;
+        logger.debug(" ");
+        return super.visitKeyValueFilterExpression(ctx);
     }
 
     @Override
     public String visitAndOrFilterExpression(AndOrFilterExpressionContext ctx) {
-        String visited = super.visitAndOrFilterExpression(ctx);
+        logger.debug("visitAndOrFilterExpression");
         String operator = ctx.andOrOperators().getText();
         WhereExpressionContext left = ctx.whereExpression(0);
         WhereExpressionContext right = ctx.whereExpression(1);
         BaseFilter leftFilter = filterExpression(left);
         BaseFilter rightFilter = filterExpression(right);
+        logger.debug("Left " + leftFilter);
+        logger.debug("Right " + rightFilter);
+
         BaseFilter result = null;
         if (operator.equalsIgnoreCase("AND")) {
             result = new AndOperatorFilter(leftFilter, rightFilter);
+            logger.debug("AND: " + result);
         } else if (operator.equalsIgnoreCase("OR")) {
             result = new OrOperatorFilter(leftFilter, rightFilter);
+            logger.debug("OR: " + result);
         }
         queue.offer(result);
-        return visited;
+        logger.debug(" ");
+        return super.visitAndOrFilterExpression(ctx);
+    }
+
+    @Override
+    public String visitParenthesisExpression(ParenthesisExpressionContext ctx) {
+        logger.debug("visitParenthesisExpression");
+        logger.debug(" ");
+        return super.visitParenthesisExpression(ctx);
     }
 
     public BaseFilter filterExpression(WhereExpressionContext context) {
-        switch (context.getRuleIndex()) {
-            case 0:
-                visitComposedFilterExpression((ComposedFilterExpressionContext) context);
-                break;
-            case 1:
-                visitAndOrFilterExpression((AndOrFilterExpressionContext) context);
-                break;
-            case 2:
-                visitAttributeValueFilterExpression((AttributeValueFilterExpressionContext) context);
-                break;
-            case 3:
-                visitKeyValueFilterExpression((KeyValueFilterExpressionContext) context);
-                break;
-        }
+        visit(context);
         return queue.poll();
     }
-
 
     @Override
     public String visit(ParseTree tree) {

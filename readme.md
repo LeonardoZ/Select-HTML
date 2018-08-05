@@ -17,19 +17,19 @@ The query syntax can be summarized as:
 
 ```
 SELECT
-    [tag|attributes|attrs|class|id|text|html|]
+    [tag|attributes|attrs|class|id|text|html|] or * (all)
 FROM
     'http://your-link.com'
 [
 WHERE
      [
-        [[tag|class|id|text|html] = 'value'] | 
+        [([tag|class|id|text|html] = 'value']) | 
      
-        [[attribute|attr] 'value' [=|contains|start with|end with] 'value']]
+        [([attribute|attr] 'value' [=|contains|start with|end with] 'value'])]
      
         [and|or|child of|parent of|descendant of|next sibling|siblings of]
      
-        [above options again]    
+        [(above options again)]    
      ]    
 
 ```
@@ -85,7 +85,8 @@ List all values that can be scraped in HTML elements:
 + html: the html content;
 + class: all classes inside an element;
 + id: element id; 
-+ attrs or attributes; all attributes found in the element;
++ attrs or attributes: all attributes found in the element;
++ the * operator: all options above;
 
 At least one is necessary, and more than one must be separated with a comma.
 
@@ -100,7 +101,7 @@ Usage: `FROM 'http://website'`
 ### WHERE filters clause (optional)
 
 Based on CSS Query Selectors, filter content using a more verbose but easy to read language. 
-It'll generate **css selector** in the end of the operation.
+It'll generate **css selector** in the end of the operation. Can be wrapped with parenthesis ()
 
 ### Base Filter
 
@@ -229,7 +230,7 @@ e.g. `tag = 'a' and attr = 'href' and class = 'highlight'` generates `a[href].hi
 
 also, it'll be resolved in the following order:
 
-`(tag = 'a' and {attr = 'href' and class = 'highlight'})`
+`(tag = 'a' and (attr = 'href' and class = 'highlight'))`
   //(left, right(left, right))
   
 #### And
@@ -318,9 +319,13 @@ Use with Java 8+ or later.
 
 Use the command `mvn clean package install` to generate the JAR file. 
 
+# Logging
+
+Select-HTML uses SLF4J, so you can bind any log framework compatible with SLF4J. In test, Log4j2 is used.
+
 # TO-DO
 
-+ Decent Logging mechanisms;
+
 + Code Validations and exception error handling;
 + Ancestor filter;
 + Pure CSS query filters;

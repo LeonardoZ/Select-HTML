@@ -40,11 +40,9 @@ public class OrOperatorFilter extends BaseFilter<OrOperatorFilter> {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("left", left)
-                .append(getFilterType())
-                .append("right", right)
-                .toString();
+        return Concat.spaced("leftFilter", left.toString(),
+                getFilterType().toString(),
+                "rightFilter", right.toString());
     }
 
 }

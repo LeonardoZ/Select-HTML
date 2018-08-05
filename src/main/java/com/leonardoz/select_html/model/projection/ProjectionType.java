@@ -2,7 +2,7 @@ package com.leonardoz.select_html.model.projection;
 
 public enum ProjectionType {
 
-    TAG, ATTRIBUTES, ATTRIBUTE, CLASSES, CLASS, ID, HTML, TEXT;
+    TAG, ATTRIBUTES, ATTRIBUTE, CLASSES, CLASS, ID, HTML, TEXT, ALL;
 
     public static ProjectionType of(String source) {
         for (ProjectionType type : values()) {

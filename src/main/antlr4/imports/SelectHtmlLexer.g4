@@ -31,8 +31,10 @@ K_CHILD     :   C H I L D ;
 K_OF        :   O F ;
 K_WITH      :   W I T H ;
 
-
 EQUAL       :   '=' ;
+ALL         :   '*' ;
+OPEN_P      :   '(' ;
+CLOSE_P     :   ')' ;
 
 STRING      :    '\'' ('\\'. | '\'\'' | ~('\'' | '\\'))* '\'' ;
 

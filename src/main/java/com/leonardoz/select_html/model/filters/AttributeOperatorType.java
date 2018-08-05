@@ -32,4 +32,9 @@ public enum AttributeOperatorType {
     public String getOriginal() {
         return original;
     }
+
+    @Override
+    public String toString() {
+        return original;
+    }
 }

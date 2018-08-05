@@ -1,7 +1,6 @@
 package com.leonardoz.select_html.model.filters;
 
 import com.leonardoz.select_html.engine.Concat;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class ComposedFilter extends BaseFilter {
 
@@ -48,10 +47,8 @@ public class ComposedFilter extends BaseFilter {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("leftFilter", leftFilter)
-                .append(getFilterType())
-                .append("rightFilter", rightFilter)
-                .toString();
+        return Concat.spaced("left", leftFilter.toString(),
+                getFilterType().toString(),
+                "right", rightFilter.toString());
     }
 }

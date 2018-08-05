@@ -1,7 +1,6 @@
 package com.leonardoz.select_html.model.filters;
 
 import com.leonardoz.select_html.engine.Concat;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class AndOperatorFilter extends BaseFilter<AndOperatorFilter> {
 
@@ -24,7 +23,7 @@ public class AndOperatorFilter extends BaseFilter<AndOperatorFilter> {
 
     @Override
     public String asOriginalFilter() {
-        return Concat.of(left.asOriginalFilter()," and ", right.asOriginalFilter());
+        return Concat.of(left.asOriginalFilter(), " and ", right.asOriginalFilter());
     }
 
     @Override
@@ -39,10 +38,8 @@ public class AndOperatorFilter extends BaseFilter<AndOperatorFilter> {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("left", left)
-                .append(getFilterType())
-                .append("right", right)
-                .toString();
+        return Concat.spaced("leftFilter", left.toString(),
+                getFilterType().toString(),
+                "rightFilter", right.toString());
     }
 }

@@ -11,9 +11,12 @@ public class ListQueryResult implements QueryResult<List<List<String>>> {
     public List<List<String>> getResult(Elements elements, List<Extractors.Extractor> extractors) {
         return elements.stream().map(element -> extractors
                 .stream()
-                .map(extractor ->
-                        extractor.project(element, DefaultExtractorListener.instance()).toString())
-                    .collect(Collectors.toList()))
+                .map(extractor -> {
+                    DefaultExtractorListener instance = DefaultExtractorListener.instance();
+                    extractor.project(element, instance);
+                    return instance.getActualTagResult().toString();
+                })
+                .collect(Collectors.toList()))
                 .collect(Collectors.toList());
     }
 
