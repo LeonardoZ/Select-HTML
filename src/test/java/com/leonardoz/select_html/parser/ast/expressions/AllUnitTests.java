@@ -1,5 +1,6 @@
-package com.leonardoz.select_html.model.filters;
+package com.leonardoz.select_html.parser.ast.filters;
 
+import com.leonardoz.select_html.parser.ast.WhereClauseTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -7,6 +8,6 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         ComposedFilterTest.class, OrOperatorFilterTest.class,
         AndOperatorFilterTest.class, KeyValueFilterTest.class,
-        AttributeValueFilterTest.class, QueryFiltersTest.class})
+        AttributeValueFilterTest.class, WhereClauseTest.class})
 public class AllUnitTests {
 }

@@ -1,4 +1,4 @@
-package com.leonardoz.select_html.model.filters;
+package com.leonardoz.select_html.parser.ast.filters;
 
 public enum AttributeOperatorType {
     CONTAINS("*=", "contains"),

@@ -1,7 +1,6 @@
-package com.leonardoz.select_html.model.filters;
+package com.leonardoz.select_html.parser.ast.filters;
 
 import com.leonardoz.select_html.engine.Concat;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class OrOperatorFilter extends BaseFilter<OrOperatorFilter> {
 
