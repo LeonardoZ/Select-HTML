@@ -1,4 +1,4 @@
-package com.leonardoz.select_html.model.projection;
+package com.leonardoz.select_html.parser.ast.projection;
 
 import java.util.HashMap;
 import java.util.List;

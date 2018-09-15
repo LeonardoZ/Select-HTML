@@ -1,6 +1,7 @@
 package com.leonardoz.select_html.engine;
 
-import com.leonardoz.select_html.model.projection.*;
+import com.leonardoz.select_html.parser.ast.projection.*;
+import com.leonardoz.select_html.parser.ast.ProjectionType;
 import org.jsoup.nodes.Element;
 
 import java.util.List;

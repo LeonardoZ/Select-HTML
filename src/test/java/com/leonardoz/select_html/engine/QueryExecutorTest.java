@@ -1,11 +1,8 @@
 package com.leonardoz.select_html.engine;
 
-import com.leonardoz.select_html.model.Query;
-import com.leonardoz.select_html.model.filters.*;
-import com.leonardoz.select_html.model.projection.Projection;
-import com.leonardoz.select_html.model.projection.ProjectionResult;
-import com.leonardoz.select_html.model.projection.ProjectionType;
-import com.leonardoz.select_html.model.source.HtmlDocumentSource;
+import com.leonardoz.select_html.parser.ast.*;
+import com.leonardoz.select_html.parser.ast.expressions.*;
+import com.leonardoz.select_html.parser.ast.projection.ProjectionResult;
 import org.junit.Test;
 
 import java.util.List;
@@ -19,9 +16,9 @@ public class QueryExecutorTest {
         String file = getTestFile();
         Projection projection =
                 new Projection(ProjectionType.TAG, ProjectionType.CLASSES, ProjectionType.ID);
-        HtmlDocumentSource source = new HtmlDocumentSource(file, true);
-        QueryFilters queryFilters = new QueryFilters();
-        Query query = new Query(projection, source, queryFilters);
+        FromClause source = new FromClause(file, true);
+        WhereClause whereClause = new WhereClause();
+        Query query = new Query(projection, source, whereClause);
         QueryExecutor queryExecutor = new QueryExecutor();
         List<ProjectionResult> results = queryExecutor.getAsProjection(query);
         assertNotNull(results);
@@ -31,11 +28,11 @@ public class QueryExecutorTest {
     public void shouldGet_DivById() {
         String file = getTestFile();
         Projection projection = new Projection(ProjectionType.TAG);
-        HtmlDocumentSource source = new HtmlDocumentSource(file, true);
+        FromClause source = new FromClause(file, true);
         KeyValueFilter div = new KeyValueFilter(FilterType.ID, "id", "a_div");
-        QueryFilters queryFilters = new QueryFilters(div);
+        WhereClause whereClause = new WhereClause(div);
 
-        Query query = new Query(projection, source, queryFilters);
+        Query query = new Query(projection, source, whereClause);
         QueryExecutor queryExecutor = new QueryExecutor();
         List<ProjectionResult> results = queryExecutor.getAsProjection(query);
 
@@ -52,15 +49,15 @@ public class QueryExecutorTest {
         String file = getTestFile();
 
         Projection projection = new Projection(ProjectionType.TAG, ProjectionType.TEXT);
-        HtmlDocumentSource source = new HtmlDocumentSource(file, true);
+        FromClause source = new FromClause(file, true);
 
         KeyValueFilter anotherDiv = new KeyValueFilter(FilterType.ID, "id", "another");
         KeyValueFilter span = new KeyValueFilter(FilterType.TAG, "tag", "span");
         ComposedFilter adjacentSibling =
                 new ComposedFilter(FilterType.ADJACENT_SIBLING, anotherDiv, span);
-        QueryFilters queryFilters = new QueryFilters(adjacentSibling);
+        WhereClause whereClause = new WhereClause(adjacentSibling);
 
-        Query query = new Query(projection, source, queryFilters);
+        Query query = new Query(projection, source, whereClause);
         QueryExecutor queryExecutor = new QueryExecutor();
         List<ProjectionResult> results = queryExecutor.getAsProjection(query);
 
@@ -79,15 +76,15 @@ public class QueryExecutorTest {
         String file = getTestFile();
 
         Projection projection = new Projection(ProjectionType.TAG, ProjectionType.ATTRIBUTES);
-        HtmlDocumentSource source = new HtmlDocumentSource(file, true);
+        FromClause source = new FromClause(file, true);
 
         AttributeValueFilter filter =
                 new AttributeValueFilter(
                         "name", AttributeOperatorType.START_WITH, "logi");
 
-        QueryFilters queryFilters = new QueryFilters(filter);
+        WhereClause whereClause = new WhereClause(filter);
 
-        Query query = new Query(projection, source, queryFilters);
+        Query query = new Query(projection, source, whereClause);
         QueryExecutor queryExecutor = new QueryExecutor();
         List<ProjectionResult> results = queryExecutor.getAsProjection(query);
 

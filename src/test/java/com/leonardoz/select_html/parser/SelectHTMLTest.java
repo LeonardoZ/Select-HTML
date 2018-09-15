@@ -1,7 +1,7 @@
 package com.leonardoz.select_html.parser;
 
-import com.leonardoz.select_html.model.projection.ProjectionResult;
-import com.leonardoz.select_html.model.projection.Tag;
+import com.leonardoz.select_html.parser.ast.projection.ProjectionResult;
+import com.leonardoz.select_html.parser.ast.projection.Tag;
 import org.junit.Test;
 
 import java.util.List;

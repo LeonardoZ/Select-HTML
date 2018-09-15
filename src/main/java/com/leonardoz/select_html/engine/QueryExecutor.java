@@ -1,11 +1,11 @@
 package com.leonardoz.select_html.engine;
 
-import com.leonardoz.select_html.model.Query;
-import com.leonardoz.select_html.model.filters.QueryFilters;
-import com.leonardoz.select_html.model.projection.Projection;
-import com.leonardoz.select_html.model.projection.ProjectionResult;
-import com.leonardoz.select_html.model.projection.ProjectionType;
-import com.leonardoz.select_html.model.source.HtmlDocumentSource;
+import com.leonardoz.select_html.parser.ast.Query;
+import com.leonardoz.select_html.parser.ast.WhereClause;
+import com.leonardoz.select_html.parser.ast.Projection;
+import com.leonardoz.select_html.parser.ast.projection.ProjectionResult;
+import com.leonardoz.select_html.parser.ast.ProjectionType;
+import com.leonardoz.select_html.parser.ast.FromClause;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -40,18 +40,18 @@ public class QueryExecutor {
 
     private Elements getElements(Query query) {
         Document doc = getDocument(query);
-        QueryFilters filters = query.getFilters();
+        WhereClause filters = query.getWhereClause();
         String queryStr = filters.generate();
         Elements select = doc.select(queryStr);
         return select;
     }
 
     private Document getDocument(Query query) {
-        HtmlDocumentSource source = query.getHtmlDocumentSource();
+        FromClause source = query.getFromClause();
         return getFromSource(source);
     }
 
-    private Document getFromSource(HtmlDocumentSource source) {
+    private Document getFromSource(FromClause source) {
         try {
             if (source.isFile()) {
                 return Jsoup.parse(new File(source.getUri()), "UTF-8");
@@ -65,7 +65,7 @@ public class QueryExecutor {
     }
 
     private List<Extractors.Extractor> chooseExtractors(Projection projection) {
-        List<ProjectionType> whatToProject = projection.getWhatToProject();
+        List<ProjectionType> whatToProject = projection.getProjectionTypes();
 
         return whatToProject
                 .stream()

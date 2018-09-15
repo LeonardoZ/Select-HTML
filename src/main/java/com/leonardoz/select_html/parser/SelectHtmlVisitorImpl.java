@@ -1,9 +1,8 @@
 package com.leonardoz.select_html.parser;
 
 import com.leonardoz.select_html.engine.Replace;
-import com.leonardoz.select_html.model.filters.*;
-import com.leonardoz.select_html.model.projection.Projection;
-import com.leonardoz.select_html.model.projection.ProjectionType;
+import com.leonardoz.select_html.parser.ast.expressions.*;
+import com.leonardoz.select_html.parser.ast.ProjectionType;
 import com.leonardoz.select_html.parser.SelectHtmlParserParser.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.slf4j.Logger;

@@ -1,11 +1,11 @@
 package com.leonardoz.select_html.parser;
 
 import com.leonardoz.select_html.engine.QueryExecutor;
-import com.leonardoz.select_html.model.Query;
-import com.leonardoz.select_html.model.filters.QueryFilters;
-import com.leonardoz.select_html.model.projection.Projection;
-import com.leonardoz.select_html.model.projection.ProjectionResult;
-import com.leonardoz.select_html.model.source.HtmlDocumentSource;
+import com.leonardoz.select_html.parser.ast.Query;
+import com.leonardoz.select_html.parser.ast.WhereClause;
+import com.leonardoz.select_html.parser.ast.Projection;
+import com.leonardoz.select_html.parser.ast.projection.ProjectionResult;
+import com.leonardoz.select_html.parser.ast.FromClause;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -41,9 +41,9 @@ public class SelectHTML {
 
     private static Query generateQuery(SelectHtmlVisitorImpl visitor) {
         Projection projection = new Projection(visitor.getProjections());
-        HtmlDocumentSource source = new HtmlDocumentSource(visitor.getLink(), false);
-        QueryFilters queryFilters = new QueryFilters(visitor.getFilter());
-        return new Query(projection, source, queryFilters);
+        FromClause source = new FromClause(visitor.getLink(), false);
+        WhereClause whereClause = new WhereClause(visitor.getFilter());
+        return new Query(projection, source, whereClause);
     }
 
 }

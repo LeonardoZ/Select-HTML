@@ -1,26 +1,27 @@
-package com.leonardoz.select_html.model.filters;
+package com.leonardoz.select_html.parser.ast;
 
+import com.leonardoz.select_html.parser.ast.expressions.BaseFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
-public class QueryFilters {
+public class WhereClause {
 
-    private static final Logger logger = LoggerFactory.getLogger(QueryFilters.class);
+    private static final Logger logger = LoggerFactory.getLogger(WhereClause.class);
 
-    // single filters
+    // single expressions
     private Optional<BaseFilter> filterExpression;
 
-    public QueryFilters() {
+    public WhereClause() {
         filterExpression = Optional.empty();
     }
 
-    public QueryFilters(Optional<BaseFilter> filter) {
+    public WhereClause(Optional<BaseFilter> filter) {
         this.filterExpression = filter;
     }
 
-    public QueryFilters(BaseFilter filter) {
+    public WhereClause(BaseFilter filter) {
         filterExpression = Optional.empty();
         this.filterExpression = Optional.of(filter);
     }

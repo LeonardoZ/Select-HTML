@@ -1,4 +1,4 @@
-package com.leonardoz.select_html.parser.ast.filters;
+package com.leonardoz.select_html.parser.ast.expressions;
 
 public abstract class BaseFilter<T extends BaseFilter<T>> implements QueryString, Comparable<T> {
 

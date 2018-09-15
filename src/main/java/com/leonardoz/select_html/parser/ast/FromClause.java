@@ -1,11 +1,11 @@
-package com.leonardoz.select_html.model.source;
+package com.leonardoz.select_html.parser.ast;
 
-public class HtmlDocumentSource {
+public class FromClause {
 
     private String uri;
     private boolean isFile = false;
 
-    public HtmlDocumentSource(String uri, boolean isFile) {
+    public FromClause(String uri, boolean isFile) {
         this.uri = uri;
         this.isFile = isFile;
     }

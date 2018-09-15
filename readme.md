@@ -98,14 +98,14 @@ Defines a website link, starting with http://, as the source that you would like
 
 Usage: `FROM 'http://website'`
 
-### WHERE filters clause (optional)
+### WHERE whereClause clause (optional)
 
 Based on CSS Query Selectors, filter content using a more verbose but easy to read language. 
 It'll generate **css selector** in the end of the operation. Can be wrapped with parenthesis ()
 
 ### Base Filter
 
-Simple key = value filters. 
+Simple key = value whereClause. 
 
 ####  tag
 
@@ -178,7 +178,7 @@ Will find elements which the specified attribute matches the search regex value.
 
 ### Composed Filters
 
-Composed filters are recognized from left to right. Any other filter can be used in both sides.
+Composed whereClause are recognized from left to right. Any other filter can be used in both sides.
 
 #### Child of
 
@@ -224,7 +224,7 @@ preceded by the first.
 
 ### Filter combinator
 
-And and Or can be combined multiple times with Base, Attribute Value and Combined filters.
+And and Or can be combined multiple times with Base, Attribute Value and Combined whereClause.
 
 e.g. `tag = 'a' and attr = 'href' and class = 'highlight'` generates `a[href].highlight`
 
@@ -272,24 +272,25 @@ It'll use a Recursive Descent algorithm to do so.
 The result for a certain query is a Parse Tree. A Parse tree represents the result of the parse process in a tree structure. 
 
 In this project, the Visitor Pattern, which is ANTLR generated, is used to walk by the tree nodes (which represents our rules) and to fill 
-the model.
-
-## Model
-
-A representation of the language in memory, using simple POJOs to match the rules specified in the grammar. Known as the
-semantic model, it's filled with the parse tree visiting process. It's divided in **projection, source and filters**. 
+the AST.
 
 ## Parser
 
-Implements the generated ANTLR Visitor class. The most complicated part is when the filters expressions must be evaluated. 
+Implements the generated ANTLR Visitor class. The most complicated part is when the whereClause expressions must be evaluated. 
 
 A queue structure is used to keep track of the last evaluated filter expression. Filters whose operators are binary (like and, or or attribute/values ones) needs this extra care.
 
-The model is filled/generated here and used by the "engine".
+The AST is filled/generated here and used by the "engine".
+
+
+## AST
+
+A representation of the language in memory, a simplified Parser Tree. Uses simple POJOs to match the rules specified in the grammar. It's filled with the parse tree visiting step. It's divided in **projection, from clause and where clause**. 
+
 
 ## Engine
 
-Will take the model, generate a query, evaluating it with jsoup library. The specified projections will be used to create projections objects. It's fairly simple. 
+Will take the AST, generate a query, evaluating it with jsoup library. The specified projections will be used to create projections objects. It's fairly simple. 
 
 jsoup is used to evaluate the CSS-like select query, to walk through the HTML and 
 to create the projections by extracting that from the HTML tags.
@@ -319,6 +320,9 @@ Use with Java 8+ or later.
 
 Use the command `mvn clean package install` to generate the JAR file. 
 
+# Test
+Use the command `mvn antlr4:antlr4 test` to run unit/integration/functional tests.
+
 # Logging
 
 Select-HTML uses SLF4J, so you can bind any log framework compatible with SLF4J. In test, Log4j2 is used.
@@ -328,7 +332,7 @@ Select-HTML uses SLF4J, so you can bind any log framework compatible with SLF4J.
 
 + Code Validations and exception error handling;
 + Ancestor filter;
-+ Pure CSS query filters;
++ Pure CSS query whereClause;
 + Pseudo selectors;
 + Page download cache for multiple queries on the same page;
 + Variables support;

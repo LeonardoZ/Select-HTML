@@ -1,10 +1,11 @@
-package com.leonardoz.select_html.model.filters;
+package com.leonardoz.select_html.parser.ast;
 
+import com.leonardoz.select_html.parser.ast.expressions.*;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class QueryFiltersTest {
+public class WhereClauseTest {
 
     @Test
     public void shouldGenerate_WithFilters() throws Exception {
@@ -18,8 +19,8 @@ public class QueryFiltersTest {
         AndOperatorFilter pAndPrice = new AndOperatorFilter(p, price);
 
         ComposedFilter childOf = new ComposedFilter(FilterType.PARENT_OF, divAndProd, pAndPrice);
-        QueryFilters queryFilters = new QueryFilters(childOf);
-        assertEquals("div#prod>p.price", queryFilters.generate());
+        WhereClause whereClause = new WhereClause(childOf);
+        assertEquals("div#prod>p.price", whereClause.generate());
     }
 
     @Test
@@ -32,8 +33,8 @@ public class QueryFiltersTest {
 
         KeyValueFilter highlight= new KeyValueFilter(FilterType.CLASS, "class", "highlight");
         AndOperatorFilter complete = new AndOperatorFilter(aAndHref, highlight);
-        QueryFilters queryFilters = new QueryFilters(complete);
-        assertEquals("a[href].highlight", queryFilters.generate());
+        WhereClause whereClause = new WhereClause(complete);
+        assertEquals("a[href].highlight", whereClause.generate());
     }
 
     @Test
@@ -46,14 +47,14 @@ public class QueryFiltersTest {
 
         KeyValueFilter highlight= new KeyValueFilter(FilterType.CLASS, "class", "highlight");
         OrOperatorFilter complete = new OrOperatorFilter(aAndHref, highlight);
-        QueryFilters queryFilters = new QueryFilters(complete);
-        assertEquals("a[href],.highlight", queryFilters.generate());
+        WhereClause whereClause = new WhereClause(complete);
+        assertEquals("a[href],.highlight", whereClause.generate());
     }
 
     @Test
     public void shouldGenerate_WithoutFilters() throws Exception {
-        QueryFilters queryFilters = new QueryFilters();
-        assertEquals("*", queryFilters.generate());
+        WhereClause whereClause = new WhereClause();
+        assertEquals("*", whereClause.generate());
     }
 
 }

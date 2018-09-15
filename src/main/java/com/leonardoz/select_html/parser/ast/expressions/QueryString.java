@@ -1,4 +1,4 @@
-package com.leonardoz.select_html.parser.ast.filters;
+package com.leonardoz.select_html.parser.ast.expressions;
 
 public interface  QueryString {
 
