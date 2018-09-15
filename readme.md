@@ -321,6 +321,7 @@ Use with Java 8+ or later.
 Use the command `mvn clean package install` to generate the JAR file. 
 
 # Test
+
 Use the command `mvn antlr4:antlr4 test` to run unit/integration/functional tests.
 
 # Logging
